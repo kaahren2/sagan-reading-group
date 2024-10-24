@@ -8,7 +8,8 @@ S4_elements = [g for g in S4]
 print(f"S4 has {len(S4_elements)} elements and they are {S4_elements}")
 print()
 
-#how many conjugacy classes of S4? Cycle type determines conjugacy class, so I expect the same as the number of integer partitions of 4. I will see ins momentarily, because Sage helpful prints the cycle type!
+#how many conjugacy classes of S4? Cycle type determines conjugacy class, so I expect the same as the number of integer partitions of 4. 
+#I will see this momentarily, because Sage helpfully prints the cycle type!
 
 print(S4.conjugacy_classes())
 print()
