@@ -1,0 +1,53 @@
+\documentclass{amsart}
+\usepackage{graphicx} % Required for inserting images
+
+\title{Amateurish pi note stunts}
+\author{Permutation enthusiasts}
+\date{November 2024}
+
+\DeclareMathOperator{\inv}{inv}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\CC}{\mathbb{C}}
+
+
+\begin{document}
+
+\maketitle
+
+\section{Problems 1.13}
+
+\begin{enumerate}
+    \item
+    \begin{enumerate}
+        \item  Consider the transposition $\pi = (i,j)$.  It swaps the order of exactly $2(j-i-1) + 1$ pairs of inputs.  This is because there are $j-i-1$ entries strictly between $i$ and $j$, and $\pi$ swaps both $i$ and $j$ with all of these.  It also swaps the order of $i$ and $j$.  Therefore, $\inv((i,j)) \equiv 1 \bmod 2$.  Next we show that $\inv$ is a homomorphism to $\ZZ/2$.  To do this, let $\inv_{i,j}(\pi)$ be $1$ if $\pi$ swaps the order of $i$ and $j$ and $0$ otherwise, so $\inv(\pi) = \sum_{i \ne j}\inv_{i,j}(\pi)$.  If we have two permutations $\pi$ and $\tau$, we have $\inv_{i,j}(\tau\pi) = \inv_{i,j}(\pi) + \inv_{\pi(i),\pi(j)}(\tau) \bmod 2$. I.e. $i$ and $j$ get swapped if $\pi$ swaps $i$ and $j$ or $\tau$ swaps $\pi(i), \pi(j)$ (but not both because they get swapped back if so).
+        Therefore
+        \begin{align*}
+        \inv(\tau\pi) &= \sum_{i\ne j} \inv_{i,j}(\tau\pi) \\
+                      &\equiv \sum_{i\ne j} \inv_{i,j}(\pi) + \inv_{\pi(i),\pi(j)}(\tau) \bmod 2 \\
+                      &\equiv \left(\sum_{i \ne j} \inv_{i,j}(\pi) + \sum_{i\ne j}\inv_{\pi(i),\pi(j)}(\tau)\right) \bmod 2  \\
+                      &\equiv \inv(\pi) + \inv(\tau) \bmod 2
+        \end{align*}
+        Taken together, these facts imply that if $\pi$ is a product of $k$ transpositions, then $\inv(\pi) \equiv k \bmod 2$.
+        \item We defined $\sgn(\pi) = (-1)^k$ when $\pi$ is a product of $k$ transpositions.  It may be that $\pi$ can be written as a product of $k$ transpositions and also as a product of $\ell\ne k$ transpositions.  However, we can see that $\sgn(\pi)$ is well defined because $\inv(\pi)$ is well defined, and we saw in (a) that $k \equiv \inv(\pi) \equiv \ell \bmod 2$.  Thus $(-1)^k = (-1)^\ell$.
+    \end{enumerate}
+    \item 
+    \begin{enumerate}
+        \item We clearly have $\epsilon \in G_s$ because $\epsilon s = s$ by an axiom of group actions.  To see that $G_s$ is closed under multiplication, let us be given $g,h \in G_s$, and we compute $(gh)s = g(hs) = gs = s$ (the second equality uses a group action axiom).
+        \item Define $\phi : G/G_s \to \mathcal{O}_s$ by $\phi(hG_s) = hs$.  This is well-defined because if $h=hg$ for $g \in G_s$, then $(hg)s = h(g(s)) = hs$.  (I'm assuming left cosets.)  The map $\phi$ is surjective because if we are given any $h \in G$, then $\phi(hG_s) = hs$.  The map $\phi$ is injective because if $\phi(hG_s) = \phi(kG_s)$, then $hs = ks$, so $k^{-1}h \in G_s$ and hence $hG_s = kG_s$.
+        \item We know $\left| G/G_s\right| = |G|/|G_s|$ by some isomorphism theorem, and by (b) we know $|\mathcal{O}_s| = \left| G/G_s\right|$.
+    \end{enumerate}
+    \item[(7)] The block decomposition of $X$ expresses $V$ as the internal direct sum $W + Y$, where if we write any vector $(w,y)$ aligned with the block form, we have $X(g)(w,y) = (A(g)w + B(g)y, C(g)y)$.  The quotient map $V \to V/W$ projects to the second coordinate, so the map induced on the quotient by $X(g)$ (have we proved it's well-defined?) is given by the matrix $C(g)$. Wait why is $V$ isomorphic to $W \oplus V/W$?  Did we lose $B$?
+    \item[(8)] I'm not sure about these
+    \begin{enumerate}
+        \item The action of $G$ can be given by a matrix in the basis?
+        \item The map $\theta$ is linear and for all $g \in G$ and $b$ in the basis, we have $g\theta(b) = \theta (gb)$?
+        \item For all $b,c$ in the basis, we have $\langle b,c \rangle = \langle gb,gc \rangle$?
+    \end{enumerate}
+    \item[(12)] By Corollary 1.6.8, any matrix that commutes with $X(g)$ for all $g$ must be of the form $cI$.  If $g \in Z_G$, then by definition $X(g)$ commutes with $X(h)$ for all $h \in G$, and the conclusion is immediate.
+    \item[(14)] Suppose towards a contradiction that $X$ is reducible,
+    so up to isomorphism we can simultaneously write the matrices $X(g)$
+    in a nontrivial block form.  But then $X(g)$ commutes with block diagonal matrices with blocks $xI$, $yI$, for any $x,y \in \CC$.  Many such matrices are not of the form $cI$, which is a contradiction.
+\end{enumerate}
+
+\end{document}
