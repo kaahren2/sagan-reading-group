@@ -19,4 +19,13 @@ https://www.math.ucdavis.edu/~anne/WQ2015/180.html
 the errata is here.
 
 https://users.math.msu.edu/users/bsagan/Books/Sym/errata.pdf
- 
+
+4) A jointly created Latex file of problem solutions lives on overleaf at
+
+https://www.overleaf.com/project/6726bcc2cdfdfd7a1d8a74a2
+
+As of now, our overleaf limits the number of people who can share a project.
+While we're trying to get that fixed, there's a directory problems/ in this
+git repository with a copy of it. There's no automatic synchronization with
+overleaf, which seems bad.
+
