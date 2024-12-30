@@ -20,12 +20,15 @@ the errata is here.
 
 https://users.math.msu.edu/users/bsagan/Books/Sym/errata.pdf
 
-4) A jointly created Latex file of problem solutions lives on overleaf at
+4) A jointly created Latex file of problem solutions lives on Overleaf at
 
-https://www.overleaf.com/project/6726bcc2cdfdfd7a1d8a74a2
+https://www.overleaf.com/9717958532hzfxsgkmqhcm#2e031e
 
-As of now, our overleaf limits the number of people who can share a project.
+As of now, our Overleaf limits the number of people who can share a project.
 While we're trying to get that fixed, there's a directory problems/ in this
 git repository with a copy of it. There's no automatic synchronization with
-overleaf, which seems bad.
+Overleaf, which seems bad.
+
+Breaking news: UCSB may have fixed it so we can all share the Overleaf
+project. Stay tuned.
 
