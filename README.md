@@ -24,11 +24,9 @@ https://users.math.msu.edu/users/bsagan/Books/Sym/errata.pdf
 
 https://www.overleaf.com/9717958532hzfxsgkmqhcm#2e031e
 
-As of now, our Overleaf limits the number of people who can share a project.
-While we're trying to get that fixed, there's a directory problems/ in this
-git repository with a copy of it. There's no automatic synchronization with
-Overleaf, which seems bad.
+Our default Overleaf limits the number of people who can share a project.
+UCSB may have fixed it so we can all share; stay tuned for updates but 
+meanwhile please let JRG know whether you can successfully edit in Overleaf.
 
-Breaking news: UCSB may have fixed it so we can all share the Overleaf
-project. Stay tuned.
+5) I made a directory Problem-Writeups-and-Notebooks/ to collect .pdf's and .ipynb's (and so on) from all of us working on the problems. No .tex for now, hoping that can all live in Overleaf.
 
