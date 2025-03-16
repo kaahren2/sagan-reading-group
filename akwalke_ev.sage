@@ -129,6 +129,8 @@ def polytabloid_to_vector(pt):
     return ans
 
 def tabloid_action_matrix(p):
+    if not isinstance(p, Permutation):
+        p = Permutation(p)
     B    = tabloid_basis(len(p))
     cols = [polytabloid_to_vector({act_on_thing(p, b):1}) for b in B['basis']]
     M    = matrix(QQ, cols).transpose()
@@ -157,12 +159,31 @@ def specht_basis_column_matrix(n, cache={}):
     cache[n] = B
     return B
 
+def specht_bases_as_column_matrices(n, cache={}):
+    if n in cache:
+        return cache[n]
+    subreps = specht_basis_as_vectors(n)
+    Bs = [matrix(QQ, [v for v in subrep]).transpose() for subrep in subreps]
+    cache[n] = Bs
+    return Bs
+
 def action_on_specht_basis(p, n):
     M    = tabloid_action_matrix(p)
     SB   = specht_basis_column_matrix(n)
     ans  = SB.solve_right(M*SB)
     return ans
 
+def actions_on_specht_bases(p, n):
+    M = tabloid_action_matrix(p)
+    SBs = specht_bases_as_column_matrices(n)
+    acts = [sb.solve_right(M*sb) for sb in SBs]
+    ans = {}
+    for lam, sb, act in zip(Partitions(n), SBs, acts):
+        ans[lam] = {
+            'basis': sb,
+            'matrix': act
+        }
+    return ans
 
 Ps = Partitions(n)
 SGA = SymmetricGroupAlgebra(CC, n)
@@ -176,3 +197,31 @@ for lam in Ps:
     # for g in SGA.group():
     #     print(g)
 
+print(actions_on_specht_bases(((1,2),(3,4)), 4))
+
+def shuffle_density(p):
+    """
+    Assign mass 1/n to the identity
+    and mass 2/n*n to the transpositions
+    """
+    from collections import Counter
+    n = len(p)
+    ct = p.cycle_tuples()
+    ctl = Counter(len(t) for t in ct)
+    if len(ctl) == 0 or set(ctl) == set([1]):
+        return 1/n
+    elif ctl[2] == 1 and set(ctl).issubset([1,2]):
+        return 2/(n*n)
+    return 0
+
+def FT(p_dens, X, n):
+    summands = [
+        (p_dens(p), X(p)) for p in Permutations(n)
+    ]
+    return (sum(a*b for a,b in summands), summands)
+
+n = 4
+for lam in Partitions(4):
+    print(f"{lam} ************** ")
+    just_X = lambda p:actions_on_specht_bases(p,n)[lam]['matrix']
+    print(FT(shuffle_density, just_X, n))
