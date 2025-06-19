@@ -1,8 +1,22 @@
+import itertools
+
 def tableau_from_lists(L):
     """
     Map entry j in list i to answer[(i,j)]
     """
     return {(i,j):k for i,r in enumerate(L) for j,k in enumerate(r)}
+
+def all_tableau_of_shape(s):
+    n = sum(s)
+    P = itertools.permutations(range(1, n+1))
+    for p in P:
+        T = {}
+        ptr = 0
+        for i in range(len(shape)):
+            for j in range(shape[i]):
+                T[(i,j)] = p[ptr]
+                ptr += 1
+        yield T
 
 def is_standard(T):
     """
@@ -85,6 +99,52 @@ def NPS(T):
         J_history.append(next_J)
     return P_history, J_history, pos_history
 
+def SPN_Ck(i0, j0, J, nrows, ncols):
+    return set((ii,j0 + Jiij0) for ii in range(i0, nrows) if (Jiij0 := J[(ii,j0)]) >= 0)
+
+def SPN_modified_backward_slide(T, i0, j0, i, j):
+    T     = T.copy()
+    path  = [(i,j)]
+    steps = []
+    # print(f"Sliding pos {(i0,j0)}, {(i,j)} in:\n{display_tableau(T)}")
+    Tget = lambda k,l: (T.get((k,l),-1) if l >= j0 else -1)
+    while i != i0 or j != j0:
+        cp   = ((i-1, j) if Tget(i-1,j) > Tget(i,j-1) else (i,j-1))
+        step = ('N' if cp == (i-1, j) else 'W')
+        T[(i,j)], T[cp], (i, j) = T[cp], T[(i,j)], cp
+        path.append((i,j))
+        steps.append(step)
+    return T, path, ''.join(steps[::-1])
+
+def SPN(P, J):
+    T_history = [T:=P.copy()]
+    J_history = [J:=J.copy()]
+    nrows = max(i for (i,j) in T) + 1
+    ncols = max(j for (i,j) in T) + 1
+    ordered_cells = sorted(P, key=lambda p:(-p[1], -p[0]), reverse=True)
+    for (i0,j0) in ordered_cells:
+        # print(f"Current T:\n{display_tableau(T)}")
+        # print(f"Current J:\n{display_tableau(J)}")
+        Ck = SPN_Ck(i0, j0, J, nrows, ncols)
+        # print(f"Doing position {(i0,j0)} with Ck {Ck}")
+        ck_data = {(i,j):SPN_modified_backward_slide(T, i0, j0, i, j) for (i,j) in Ck}
+        max_path_len = max(len(path) for _,_,path in ck_data.values())
+        for (i,j),(_,_,steps) in ck_data.items():
+            ck_data[(i,j)] += (f"{steps:O<{max_path_len}}",)
+        # print("Options:", ck_data)
+        (im,jm) = max(ck_data, key=lambda p:ck_data[p][-1])
+        # print(f"Found max ck {(im,jm)} val {ck_data[(im,jm)]}")
+        new_J = J.copy()
+        for h in range(i0+1, im+1):
+            new_J[(h,j0)] = J[(h-1,j0)] + 1
+        new_J[(i0,j0)] = 0
+        T_history.append(T := ck_data[(im,jm)][0])
+        J_history.append(J := new_J)
+    return T_history, J_history
+        
+
+
+
 def n_ascii(s):
     """
     Return the number of ascii characters in the string s
@@ -127,6 +187,9 @@ def display_tableau_list(L, special_poses=None):
     ans = '\n'.join(ans) + '\n'
     return ans
 
+
+
+
 T = tableau_from_lists(
     [
         [6, 2],
@@ -137,10 +200,25 @@ T = tableau_from_lists(
 
 PH, JH, poses = NPS(T)
 
+TH, JJH = SPN(PH[-1], JH[-1])
+
 print(display_tableau_list(PH, poses+[None]))
 print()
 print(display_tableau_list(JH))
+print()
 
+print(display_tableau_list(TH[::-1]))
+print()
+print(display_tableau_list(JJH[::-1]))
 
+shapes = [(2,2,2)]
+for shape in shapes:
+    for T in all_tableau_of_shape(shape):
+        TH, JH, poses = NPS(T)
+        TTH, JJH = SPN(TH[-1], JH[-1])
+        assert TTH[-1] == TH[0]
+        assert all(v==0 for v in JJH[-1].values())
+    print(f"Checked all tableau of shape {shape}")
+        
 
             
